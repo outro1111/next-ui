@@ -1,7 +1,11 @@
-import { Inter } from "next/font/google";
+import localFont from 'next/font/local'
 import "./globals.css";
+import { Nav } from '@/components/nav';
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: '../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+})
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +15,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={pretendard.className}>
+        <div className="flex min-h-screen w-full flex-col bg-muted/40 bg-[length:100%_auto] bg-no-repeat bg-[url('../public/images/main-bg.png')]">
+          <Nav />
+          <div className="flex flex-col sm:gap-4 sm:pl-14">
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
