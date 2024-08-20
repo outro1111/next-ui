@@ -48,7 +48,7 @@ export function Mail({ accounts, mails = initialMails, defaultLayout = [10, 32, 
 				onLayout={(sizes) => {
 					document.cookie = `react-resizable-panels:layout:mail=${JSON.stringify(sizes)}`;
 				}}
-				className="h-full max-h-[calc(100vh-66px)] items-stretch"
+				className="h-full max-h-[calc(100vh-57px)] items-stretch"
 			>
 				<ResizablePanel  //단위 : 퍼센트
 					defaultSize={defaultLayout[0]}

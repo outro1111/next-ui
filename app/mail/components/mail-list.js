@@ -23,7 +23,7 @@ export function MailList({ items, selectedMailId, setSelectedMailId }) {
 	};
 
 	return (
-		<ScrollArea className="h-[calc(100vh-128px)]">
+		<ScrollArea className="h-[calc(100vh-186px)]">
 			<div className="flex flex-col gap-2 p-4 pt-0">
 				{items.map((item) => (					
 					<button
