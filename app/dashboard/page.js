@@ -18,6 +18,9 @@ import {
   ShoppingCart,
   Truck,
   Users2,
+  DollarSign,
+  Users,
+  Activity,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -55,7 +58,7 @@ import {
 } from "@/components/ui/pagination"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import {
   Table,
   TableBody,
@@ -70,6 +73,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Tooltip,
   TooltipContent,
@@ -80,117 +84,164 @@ import {
 export default function Dashboard() {
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 sm:pt-4">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="sm:hidden">
-              <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="sm:max-w-xs">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                href="#"
-                className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-              >
-                <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Home className="h-5 w-5" />
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 px-2.5 text-foreground"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                Orders
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Package className="h-5 w-5" />
-                Products
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Users2 className="h-5 w-5" />
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <LineChart className="h-5 w-5" />
-                Settings
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <Breadcrumb className="hidden md:flex">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="#">Dashboard</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="#">Orders</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Recent Orders</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="relative ml-auto flex-1 md:grow-0">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search..."
-            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-          />
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="overflow-hidden rounded-full"
-            >
-              <Image
-                src="/images/placeholder-user.jpg"
-                width={36}
-                height={36}
-                alt="Avatar"
-                className="overflow-hidden rounded-full"
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </header>
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:pb-4 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+            <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
+              <CardHeader className="pb-3">
+                <CardTitle>공지 게시판</CardTitle>
+              </CardHeader>
+              <CardContent>
+                  <Table className="table-fixed">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>제목</TableHead>
+                        <TableHead className="w-20 text-center hidden xl:table-cell">
+                          구분
+                        </TableHead>
+                        <TableHead className="w-32 text-center hidden 2xl:table-cell">
+                        작성일
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="bg-accent">
+                        <TableCell className="py-3">
+                          <div className="font-medium truncate"><Link href="#">SQL 튜닝기초 직무 기술교육 안내</Link></div>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden xl:table-cell">
+                          <Badge className="text-xs" variant="destructive">
+                            사내
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
+                          2023-06-23
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="py-3">
+                          <div className="font-medium truncate"><Link href="#">자산보호 및 비밀 유지 서약 및 개인정보 제공 동의 정기 서명</Link></div>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden xl:table-cell">
+                          <Badge className="text-xs">
+                            그룹
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
+                          2023-06-23
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className="py-3">
+                          <div className="font-medium truncate"><Link href="#">하절기 쿨비즈 기간 종료에 따른 비즈니스 캐주얼 시행 안내</Link></div>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden xl:table-cell">
+                          <Badge className="text-xs" variant="destructive">
+                            사내
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
+                          2023-06-23
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+            </Card>
+            <Card className="xl:col-span-2 2xl:col-span-1" x-chunk="dashboard-05-chunk-1">
+              <CardHeader className="pb-3">
+                <CardTitle>홍길동님</CardTitle>
+                <div className="flex items-start py-4">
+                  <div className="flex items-start gap-4 text-sm">
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>NA</AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                      <div className="line-clamp-1 text-lg">UI Company</div>
+                      <div className="line-clamp-1 text-xs">
+                      <span className="font-medium">부서 : 웹앱개발팀</span>
+                      </div>
+                      <div className="line-clamp-1 text-xs">
+                        <span className="font-medium">근무시간 : </span>08:30_17:30
+                      </div>
+                      <div className="line-clamp-1 text-xs">
+                        <span className="font-medium">근무지역 : </span>본사 4층
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardFooter>
+                <Button size="sm">로그아웃</Button>
+              </CardFooter>
+            </Card>
+
+            <Card x-chunk="dashboard-01-chunk-0">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-bold">
+                  임직원 검색
+                </CardTitle>
+                <Users className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="pb-4">
+                {/* <div className="text-2xl font-bold">+270</div> */}
+                <p className="text-xs text-muted-foreground">
+                  조직 내 임직원을 검색합니다
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button size="sm">검색하기</Button>
+              </CardFooter>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-1">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-bold">
+                  회의실 예약
+                </CardTitle>
+                <DollarSign className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="pb-4">
+                {/* <div className="text-2xl font-bold">+5</div> */}
+                <p className="text-xs text-muted-foreground">
+                  예약 가능한 회의실이 있습니다.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button size="sm">예약하기</Button>
+              </CardFooter>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-bold">eHR</CardTitle>
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="pb-4">
+                {/* <div className="text-2xl font-bold">+12,234</div> */}
+                <p className="text-xs text-muted-foreground">
+                eHR 정보를 확인 할 수 있습니다.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button size="sm">바로가기</Button>
+              </CardFooter>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-3">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-bold">복리후생</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="pb-4">
+                {/* <div className="text-2xl font-bold">+573</div> */}
+                <p className="text-xs text-muted-foreground">
+                복리후생 정보를 확인 할 수 있습니다.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button size="sm">바로가기</Button>
+              </CardFooter>
+            </Card>
+ 
             <Card
               className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
             >

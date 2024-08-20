@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertCircle, Archive, ArchiveX, File, Inbox, MessagesSquare, Search, Send, ShoppingCart, Trash2, Users2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -15,9 +15,31 @@ import { MailList } from "@/app/mail/components/mail-list";
 import { Nav } from "@/app/mail/components/nav";
 import { mails as initialMails } from "@/app/mail/data";
 
-export function Mail({ accounts, mails = initialMails, defaultLayout = [20, 32, 48], defaultCollapsed = false, navCollapsedSize }) {
+export function Mail({ accounts, mails = initialMails, defaultLayout = [10, 32, 48], defaultCollapsed = false, navCollapsedSize }) {
 	const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-	const [selectedMailId, setSelectedMailId] = useState(mails[0]?.id || null);
+	const [selectedMailId, setSelectedMailId] = useState(null); // useState(mails[0]?.id || null);
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 768) {
+				setIsCollapsed(true);
+				document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
+			}else {
+				setIsCollapsed(false);
+				document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
+			}
+		};
+	
+		// 최초 렌더링 시 실행
+		handleResize();
+	
+		// 윈도우 리사이즈 이벤트 리스너 설정
+		window.addEventListener('resize', handleResize);
+	
+		// 클린업
+		return () => window.removeEventListener('resize', handleResize);
+	}, [setIsCollapsed]);
+	
 
 	return (
 		<TooltipProvider delayDuration={0}>
@@ -26,9 +48,9 @@ export function Mail({ accounts, mails = initialMails, defaultLayout = [20, 32, 
 				onLayout={(sizes) => {
 					document.cookie = `react-resizable-panels:layout:mail=${JSON.stringify(sizes)}`;
 				}}
-				className="h-full max-h-[800px] items-stretch"
+				className="h-full max-h-[calc(100vh-66px)] items-stretch"
 			>
-				<ResizablePanel
+				<ResizablePanel  //단위 : 퍼센트
 					defaultSize={defaultLayout[0]}
 					collapsedSize={navCollapsedSize}
 					collapsible={true}
@@ -39,10 +61,12 @@ export function Mail({ accounts, mails = initialMails, defaultLayout = [20, 32, 
 						document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
 					}}
 					onResize={() => {
-						setIsCollapsed(false);
-						document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
+							setIsCollapsed(false);
+							document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
 					}}
-					className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
+					className={cn("h-[100vh] min-w-[150px]",
+						isCollapsed ? "min-w-[50px] max-w-[50px] md:max-w-[200px] transition-all duration-300 ease-in-out border-r" : "",
+					)} 
 				>
 					<div className={cn("flex h-[56px] items-center justify-center", isCollapsed ? "h-[56px]" : "px-2")}>
 						<AccountSwitcher isCollapsed={isCollapsed} accounts={accounts} />
@@ -126,8 +150,8 @@ export function Mail({ accounts, mails = initialMails, defaultLayout = [20, 32, 
 						]}
 					/>
 				</ResizablePanel>
-				<ResizableHandle withHandle />
-				<ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+				<ResizableHandle withHandle className="hidden md:flex"/>
+				<ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className={cn(selectedMailId ? "hidden" : "block", "md:block")}>
 					<Tabs defaultValue="all">
 						<div className="flex items-center px-4 py-2">
 							<h1 className="text-xl font-bold">받은 메일함</h1>
@@ -159,10 +183,10 @@ export function Mail({ accounts, mails = initialMails, defaultLayout = [20, 32, 
 						</TabsContent>
 					</Tabs>
 				</ResizablePanel>
-				<ResizableHandle withHandle />
-				<ResizablePanel defaultSize={defaultLayout[2]}>
+				<ResizableHandle withHandle className="hidden md:flex"/>
+				<ResizablePanel defaultSize={defaultLayout[2]} className={cn(selectedMailId ? "block" : "hidden", "md:block")}>
 					{/* 선택된 메일을 찾아 MailDisplay 컴포넌트로 전달 */}
-					<MailDisplay mail={mails.find((item) => item.id === selectedMailId) || null} />
+					<MailDisplay mail={mails.find((item) => item.id === selectedMailId) || null} setSelectedMailId={setSelectedMailId} />
 				</ResizablePanel>
 			</ResizablePanelGroup>
 		</TooltipProvider>

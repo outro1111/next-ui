@@ -3,7 +3,7 @@ import addHours from "date-fns/addHours";
 import format from "date-fns/format";
 import nextSaturday from "date-fns/nextSaturday";
 import { ko } from 'date-fns/locale';
-import { Archive, ArchiveX, Clock, Forward, MoreVertical, Reply, ReplyAll, Trash2 } from "lucide-react";
+import { Archive, ArchiveX, Clock, Forward, MoreVertical, Reply, ReplyAll, Trash2, ChevronLeft  } from "lucide-react";
 
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,13 +17,22 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-export function MailDisplay({ mail }) {
+export function MailDisplay({ mail, setSelectedMailId }) {
 	const today = new Date();
 
 	return (
 		<div className="flex h-full flex-col">
 			<div className="flex items-center p-2">
 				<div className="flex items-center gap-2">
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button variant="ghost" size="icon" className="flex md:hidden" onClick={()=> setSelectedMailId(null)}> 
+								<ChevronLeft className="h-4 w-4" />
+								<span className="sr-only">뒤로</span>
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>뒤로</TooltipContent>
+					</Tooltip>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={!mail}>
