@@ -21,6 +21,8 @@ import {
   DollarSign,
   Users,
   Activity,
+  AlarmClockCheck,
+  Command
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -80,11 +82,51 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+// supabase
+import { createClientList } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/server'
+import { createClientMail } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
+// 날짜 포맷
+import { useFormatDate } from "@/utils/useFormatDate"
+import { signOut } from '@/app/auth/login/actions'
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const {formatDate} = useFormatDate() // 리뷰 날짜 포맷팅
+  const {formatDateHour} = useFormatDate() // 리뷰 날짜 시간 포맷팅
+  // supabase
+  const cookieStore = cookies()
+  const supabaseList = createClientList(cookieStore)
+  const { data: bbsLists } = await supabaseList.from('bbs').select()
+
+  const supabaseUser = createClient()
+  const { data: getUser, error } = await supabaseUser.auth.getUser()
+
+  const supabase = createClientMail(cookieStore);
+	const { data: mailsData } = await supabase.from('mails').select('*').limit(10);
+
+  function getBadgeVariantFromLabel(label) {
+    if (["업무"].includes(label)) {
+      return "default";
+    }
+    if (["개인"].includes(label)) {
+      return "outline";
+    }
+    return "secondary";
+  }
+
   return (
     <>
-      <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:pb-4 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+      {/* <pre>{JSON.stringify(bbsLists, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(getUser, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(mailsData, null, 2)}</pre> */}
+      {/* {bbsLists.map((bbsList) => (
+        <p key={bbsList.id}>
+          <span>{bbsList.title}</span>
+        </p>
+      ))} */}
+      <main className="grid flex-1 items-start gap-4 p-5 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
@@ -92,65 +134,45 @@ export default function Dashboard() {
                 <CardTitle>공지 게시판</CardTitle>
               </CardHeader>
               <CardContent>
-                  <Table className="table-fixed">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>제목</TableHead>
-                        <TableHead className="w-20 text-center hidden xl:table-cell">
-                          구분
-                        </TableHead>
-                        <TableHead className="w-32 text-center hidden 2xl:table-cell">
-                        작성일
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow className="bg-accent">
-                        <TableCell className="py-3">
-                          <div className="font-medium truncate"><Link href="#">SQL 튜닝기초 직무 기술교육 안내</Link></div>
+              <Table className="table-fixed">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>제목</TableHead>
+                      <TableHead className="w-24 hidden xl:table-cell">
+                        구분
+                      </TableHead>
+                      <TableHead className="w-32 hidden 2xl:table-cell">
+                      작성일
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {bbsLists.map((bbsList, index) => (
+                      <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
+                        <TableCell className="py-0 px-1">
+                          <Link href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
                         </TableCell>
-                        <TableCell className="py-3 text-center hidden xl:table-cell">
-                          <Badge className="text-xs" variant="destructive">
-                            사내
-                          </Badge>
+                        <TableCell className="py-0 px-1 hidden xl:table-cell">
+                          <Link href="/list" className="block truncate p-3">
+                            <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
+                              { bbsList.type }
+                            </Badge>
+                          </Link>
                         </TableCell>
-                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
-                          2023-06-23
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="py-3">
-                          <div className="font-medium truncate"><Link href="#">자산보호 및 비밀 유지 서약 및 개인정보 제공 동의 정기 서명</Link></div>
-                        </TableCell>
-                        <TableCell className="py-3 text-center hidden xl:table-cell">
-                          <Badge className="text-xs">
-                            그룹
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
-                          2023-06-23
+                        <TableCell className="py-0 px-1 hidden 2xl:table-cell">
+                          <Link href="/mail" className="block p-3">
+                            { formatDate(bbsList.created_at) }
+                          </Link>
                         </TableCell>
                       </TableRow>
-                      <TableRow>
-                        <TableCell className="py-3">
-                          <div className="font-medium truncate"><Link href="#">하절기 쿨비즈 기간 종료에 따른 비즈니스 캐주얼 시행 안내</Link></div>
-                        </TableCell>
-                        <TableCell className="py-3 text-center hidden xl:table-cell">
-                          <Badge className="text-xs" variant="destructive">
-                            사내
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="py-3 text-center hidden 2xl:table-cell">
-                          2023-06-23
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
             </Card>
             <Card className="xl:col-span-2 2xl:col-span-1" x-chunk="dashboard-05-chunk-1">
               <CardHeader className="pb-3">
-                <CardTitle>홍길동님</CardTitle>
+                <CardTitle>{ getUser.user.user_metadata.last_name }{ getUser.user.user_metadata.first_name }</CardTitle>
                 <div className="flex items-start py-4">
                   <div className="flex items-start gap-4 text-sm">
                     <Avatar className="w-16 h-16">
@@ -159,408 +181,201 @@ export default function Dashboard() {
                     </Avatar>
                     <div className="grid gap-1">
                       <div className="line-clamp-1 text-lg">UI Company</div>
-                      <div className="line-clamp-1 text-xs">
-                      <span className="font-medium">부서 : 웹앱개발팀</span>
+                      <div className="line-clamp-1 text-sm">
+                        <span className="font-medium">부서 :</span> { getUser.user.user_metadata.department }
                       </div>
-                      <div className="line-clamp-1 text-xs">
-                        <span className="font-medium">근무시간 : </span>08:30_17:30
+                      <div className="line-clamp-1 text-sm">
+                        <span className="font-medium">직급 :</span> { getUser.user.user_metadata.position }
                       </div>
-                      <div className="line-clamp-1 text-xs">
-                        <span className="font-medium">근무지역 : </span>본사 4층
+                      <div className="line-clamp-1 text-sm">
+                        <span className="font-medium">근무시간 :</span> 08:30_17:30
+                      </div>
+                      <div className="line-clamp-1 text-sm">
+                        <span className="font-medium">근무장소 :</span> 본사 4층
                       </div>
                     </div>
                   </div>
                 </div>
               </CardHeader>
               <CardFooter>
-                <Button size="sm">로그아웃</Button>
+                <form>
+                  <Button variant="outline" size="sm" formAction={signOut}>로그아웃</Button>
+                </form>
               </CardFooter>
             </Card>
-
             <Card x-chunk="dashboard-01-chunk-0">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-bold">
-                  임직원 검색
-                </CardTitle>
+                <CardTitle className="text-md font-semibold">임직원 검색</CardTitle>
                 <Users className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+270</div> */}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   조직 내 임직원을 검색합니다
                 </p>
               </CardContent>
               <CardFooter>
-                <Button size="sm">검색하기</Button>
+                <Button variant="outline" size="sm">
+                  <Link href="/members">검색하기</Link>
+                </Button>
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-1">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-bold">
-                  회의실 예약
-                </CardTitle>
-                <DollarSign className="h-5 w-5 text-muted-foreground" />
+                <CardTitle className="text-md font-semibold">회의실 예약</CardTitle>
+                <AlarmClockCheck className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+5</div> */}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   예약 가능한 회의실이 있습니다.
                 </p>
               </CardContent>
               <CardFooter>
-                <Button size="sm">예약하기</Button>
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm">예약하기</Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>준비중입니다</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-2">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-bold">eHR</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-md font-semibold">eHR</CardTitle>
+                <Command className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+12,234</div> */}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                 eHR 정보를 확인 할 수 있습니다.
                 </p>
               </CardContent>
               <CardFooter>
-                <Button size="sm">바로가기</Button>
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm">바로가기</Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>준비중입니다</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-3">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-bold">복리후생</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-md font-semibold">복리후생</CardTitle>
+                <CreditCard className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+573</div> */}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                 복리후생 정보를 확인 할 수 있습니다.
                 </p>
               </CardContent>
               <CardFooter>
-                <Button size="sm">바로가기</Button>
-              </CardFooter>
-            </Card>
- 
-            <Card
-              className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
-            >
-              <CardHeader className="pb-3">
-                <CardTitle>Your Orders</CardTitle>
-                <CardDescription className="max-w-lg text-balance leading-relaxed">
-                  Introducing Our Dynamic Orders Dashboard for Seamless
-                  Management and Insightful Analysis.
-                </CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button>Create New Order</Button>
-              </CardFooter>
-            </Card>
-            <Card x-chunk="dashboard-05-chunk-1">
-              <CardHeader className="pb-2">
-                <CardDescription>This Week</CardDescription>
-                <CardTitle className="text-4xl">$1,329</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-xs text-muted-foreground">
-                  +25% from last week
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Progress value={25} aria-label="25% increase" />
-              </CardFooter>
-            </Card>
-            <Card x-chunk="dashboard-05-chunk-2">
-              <CardHeader className="pb-2">
-                <CardDescription>This Month</CardDescription>
-                <CardTitle className="text-4xl">$5,329</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-xs text-muted-foreground">
-                  +10% from last month
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Progress value={12} aria-label="12% increase" />
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm">바로가기</Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>준비중입니다</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </CardFooter>
             </Card>
           </div>
-          <Tabs defaultValue="week">
-            <div className="flex items-center">
-              <TabsList>
-                <TabsTrigger value="week">Week</TabsTrigger>
-                <TabsTrigger value="month">Month</TabsTrigger>
-                <TabsTrigger value="year">Year</TabsTrigger>
-              </TabsList>
-              <div className="ml-auto flex items-center gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-7 gap-1 text-sm"
-                    >
-                      <ListFilter className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Filter</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
-                      Fulfilled
-                    </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Declined
-                    </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Refunded
-                    </DropdownMenuCheckboxItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 gap-1 text-sm"
-                >
-                  <File className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only">Export</span>
-                </Button>
-              </div>
-            </div>
-            <TabsContent value="week">
-              <Card x-chunk="dashboard-05-chunk-3">
-                <CardHeader className="px-7">
-                  <CardTitle>Orders</CardTitle>
-                  <CardDescription>
-                    Recent orders from your store.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Customer</TableHead>
-                        <TableHead className="hidden sm:table-cell">
-                          Type
-                        </TableHead>
-                        <TableHead className="hidden sm:table-cell">
-                          Status
-                        </TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Date
-                        </TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow className="bg-accent">
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-23
-                        </TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Olivia Smith</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            olivia@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Refund
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="outline">
-                            Declined
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-24
-                        </TableCell>
-                        <TableCell className="text-right">$150.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Noah Williams</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            noah@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Subscription
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-25
-                        </TableCell>
-                        <TableCell className="text-right">$350.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Emma Brown</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            emma@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-26
-                        </TableCell>
-                        <TableCell className="text-right">$450.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-23
-                        </TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-23
-                        </TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Olivia Smith</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            olivia@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Refund
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="outline">
-                            Declined
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-24
-                        </TableCell>
-                        <TableCell className="text-right">$150.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Emma Brown</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            emma@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Badge className="text-xs" variant="secondary">
-                            Fulfilled
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          2023-06-26
-                        </TableCell>
-                        <TableCell className="text-right">$450.00</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between flex-wrap px-7">
+              <CardTitle>받은 메일</CardTitle>
+              <Button variant="outline" size="sm">
+                <Link href="/mail">메일쓰기</Link>
+              </Button>
+              <CardDescription className="basis-full">
+                { getUser.user.user_metadata.email } 계정의 새로 받은 메일을 확인 할 수 있습니다.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table className="table-fixed">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-52">보낸사람</TableHead>
+                    <TableHead>제목</TableHead>
+                    <TableHead className="w-56 hidden lg:table-cell">타입</TableHead>
+                    <TableHead className="w-52 hidden xl:table-cell">날짜</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {mailsData.map((mails, index) => (
+                    <TableRow className={`${!mails.read ? "bg-accent" : ""}`} key={ mails.id }>
+                      <TableCell className="py-0 px-1">
+                        <Link href="/mail" className="block font-medium truncate p-3">{ mails.name }</Link>
+                      </TableCell>
+                      <TableCell className="p-0 px-1">
+                        <Link href="/mail" className="block font-medium truncate p-3">
+                          {!mails.read && <span className="inline-block h-2 w-2 mr-1 rounded-full bg-blue-600" />}  
+                          { mails.subject }
+                        </Link>
+                      </TableCell>
+                      <TableCell className="p-0 px-1 hidden lg:table-cell">
+                        <Link href="/mail" className="block font-medium p-3">
+                          {mails.labels.length ? (
+                            <div className="flex items-center gap-1">
+                              {mails.labels.map((label) => (
+                                <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
+                                  {label}
+                                </Badge>
+                              ))}
+                            </div>
+                          ) : null}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="p-0 px-1 hidden xl:table-cell">
+                        <Link href="/mail" className="block font-medium p-3">{ formatDateHour(mails.date) }</Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </div>
         <div>
-          <Card
-            className="overflow-hidden" x-chunk="dashboard-05-chunk-4"
-          >
+          <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
             <CardHeader className="flex flex-row items-start bg-muted/50">
-              <div className="grid gap-0.5">
-                <CardTitle className="group flex items-center gap-2 text-lg">
-                  Order Oe31b70H
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-                  >
-                    <Copy className="h-3 w-3" />
-                    <span className="sr-only">Copy Order ID</span>
-                  </Button>
-                </CardTitle>
-                <CardDescription>Date: November 23, 2023</CardDescription>
-              </div>
-              <div className="ml-auto flex items-center gap-1">
-                <Button size="sm" variant="outline" className="h-8 gap-1">
-                  <Truck className="h-3.5 w-3.5" />
-                  <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                    Track Order
-                  </span>
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="outline" className="h-8 w-8">
-                      <MoreVertical className="h-3.5 w-3.5" />
-                      <span className="sr-only">More</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Export</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Trash</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <div className="grid gap-0.5 w-full">
+                <AspectRatio ratio={21 / 5} className="bg-muted">
+                  <Link href="https://example.com" target="_blank">
+                    <Image
+                      src="/images/banner-design.png"
+                      alt="Photo by Drew Beamer"
+                      width={500}
+                      height={300}
+                      // fill
+                      className="h-full w-full rounded-md object-cover dark:opacity-80"
+                    />
+                  </Link>
+                </AspectRatio>
+                <AspectRatio ratio={21 / 5} className="bg-muted mt-2">
+                  <Link href="https://example.com" target="_blank">
+                    <Image
+                      src="/images/banner-webplanning.png"
+                      alt="Photo by Drew Beamer"
+                      width={500}
+                      height={300}
+                      // fill
+                      className="h-full w-full rounded-md object-cover dark:opacity-80"
+                    />
+                  </Link>
+                </AspectRatio>
               </div>
             </CardHeader>
             <CardContent className="p-6 text-sm">

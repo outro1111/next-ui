@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useMail } from "@/app/mail/use-mail"
 
-
-export function MailList({ items, selectedMailId, setSelectedMailId }) {
+export function MailList({ items }) {
+	const [mail, setMail] = useMail()
 
 	//메일 날짜 1년 미만일때 시간차이, 이상일때 날짜로 출력
 	const formatDate = (date) => {
@@ -30,9 +31,15 @@ export function MailList({ items, selectedMailId, setSelectedMailId }) {
 						key={item.id}
 						className={cn(
 							"flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-							selectedMailId === item.id && "bg-muted"
+							mail.selected === item.id && "bg-muted"
 						)}
-						onClick={() => setSelectedMailId(item.id)}
+						onClick={() => {
+								setMail({
+									...mail,
+									selected: item.id,
+								})
+							}
+						}
 					>
 						<div className="flex w-full flex-col gap-1">
 							<div className="flex items-center">
@@ -40,7 +47,7 @@ export function MailList({ items, selectedMailId, setSelectedMailId }) {
 									<div className="font-semibold">{item.name}</div>
 									{!item.read && <span className="flex h-2 w-2 rounded-full bg-blue-600" />}
 								</div>
-								<div className={cn("ml-auto text-xs", selectedMailId === item.id ? "text-foreground" : "text-muted-foreground")}>
+								<div className={cn("ml-auto text-xs", mail.selected === item.id ? "text-foreground" : "text-muted-foreground")}>
 									{formatDate(item.date)}
 								</div>
 							</div>
@@ -64,11 +71,11 @@ export function MailList({ items, selectedMailId, setSelectedMailId }) {
 }
 
 function getBadgeVariantFromLabel(label) {
-	if (["work"].includes(label.toLowerCase())) {
+	if (["업무"].includes(label)) {
 		return "default";
 	}
 
-	if (["personal"].includes(label.toLowerCase())) {
+	if (["개인"].includes(label)) {
 		return "outline";
 	}
 
