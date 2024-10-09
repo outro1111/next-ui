@@ -131,7 +131,7 @@ export default async function Dashboard() {
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
               <CardHeader className="pb-3">
-                <CardTitle>공지 게시판2</CardTitle>
+                <CardTitle>공지 게시판</CardTitle>
               </CardHeader>
               <CardContent>
               <Table className="table-fixed">
