@@ -169,8 +169,8 @@ export function MailDisplay({ item }) {
 							</Avatar>
 							<div className="grid gap-1">
 								<div className="font-semibold">{item.name}</div>
-								<div className="line-clamp-1 text-xs">{item.subject}</div>
-								<div className="line-clamp-1 text-xs">
+								<div className="line-clamp-1">{item.subject}</div>
+								<div className="line-clamp-1">
 									<span className="font-medium">Reply-To:</span> {item.email}
 								</div>
 							</div>

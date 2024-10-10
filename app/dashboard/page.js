@@ -150,17 +150,17 @@ export default async function Dashboard() {
                     {bbsLists.map((bbsList, index) => (
                       <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
                         <TableCell className="py-0 px-1">
-                          <Link href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
+                          <Link prefetch={true} href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
                         </TableCell>
                         <TableCell className="py-0 px-1 hidden xl:table-cell">
-                          <Link href="/list" className="block truncate p-3">
+                          <Link prefetch={true} href="/list" className="block truncate p-3">
                             <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
                               { bbsList.type }
                             </Badge>
                           </Link>
                         </TableCell>
                         <TableCell className="py-0 px-1 hidden 2xl:table-cell">
-                          <Link href="/mail" className="block p-3">
+                          <Link prefetch={true} href="/mail" className="block p-3">
                             { formatDate(bbsList.created_at) }
                           </Link>
                         </TableCell>
@@ -176,11 +176,11 @@ export default async function Dashboard() {
                 <div className="flex items-start py-4">
                   <div className="flex items-start gap-4 text-sm">
                     <Avatar className="w-16 h-16">
-                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarImage src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/member_avatar/2.png`} />
                       <AvatarFallback>NA</AvatarFallback>
                     </Avatar>
                     <div className="grid gap-1">
-                      <div className="line-clamp-1 text-lg">UI Company</div>
+                      <div className="line-clamp-1 text-lg">Cellink</div>
                       <div className="line-clamp-1 text-sm">
                         <span className="font-medium">부서 :</span> { getUser.user.user_metadata.department }
                       </div>
@@ -216,7 +216,7 @@ export default async function Dashboard() {
               </CardContent>
               <CardFooter>
                 <Button variant="outline" size="sm">
-                  <Link href="/members">검색하기</Link>
+                  <Link prefetch={true} href="/members">검색하기</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -297,7 +297,7 @@ export default async function Dashboard() {
             <CardHeader className="flex flex-row items-center justify-between flex-wrap px-7">
               <CardTitle>받은 메일</CardTitle>
               <Button variant="outline" size="sm">
-                <Link href="/mail">메일쓰기</Link>
+                <Link prefetch={true} href="/mail">메일쓰기</Link>
               </Button>
               <CardDescription className="basis-full">
                 { getUser.user.user_metadata.email } 계정의 새로 받은 메일을 확인 할 수 있습니다.
@@ -317,16 +317,16 @@ export default async function Dashboard() {
                   {mailsData.map((mails, index) => (
                     <TableRow className={`${!mails.read ? "bg-accent" : ""}`} key={ mails.id }>
                       <TableCell className="py-0 px-1">
-                        <Link href="/mail" className="block font-medium truncate p-3">{ mails.name }</Link>
+                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3">{ mails.name }</Link>
                       </TableCell>
                       <TableCell className="p-0 px-1">
-                        <Link href="/mail" className="block font-medium truncate p-3">
+                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3">
                           {!mails.read && <span className="inline-block h-2 w-2 mr-1 rounded-full bg-blue-600" />}  
                           { mails.subject }
                         </Link>
                       </TableCell>
                       <TableCell className="p-0 px-1 hidden lg:table-cell">
-                        <Link href="/mail" className="block font-medium p-3">
+                        <Link prefetch={true} href="/mail" className="block font-medium p-3">
                           {mails.labels.length ? (
                             <div className="flex items-center gap-1">
                               {mails.labels.map((label) => (
@@ -339,7 +339,7 @@ export default async function Dashboard() {
                         </Link>
                       </TableCell>
                       <TableCell className="p-0 px-1 hidden xl:table-cell">
-                        <Link href="/mail" className="block font-medium p-3">{ formatDateHour(mails.date) }</Link>
+                        <Link prefetch={true} href="/mail" className="block p-3">{ formatDateHour(mails.date) }</Link>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -355,120 +355,137 @@ export default async function Dashboard() {
                 <AspectRatio ratio={21 / 5} className="bg-muted">
                   <Link href="https://example.com" target="_blank">
                     <Image
-                      src="/images/banner-design.png"
+                      // src="/images/banner-1.jpg"
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1.jpg`}
                       alt="Photo by Drew Beamer"
-                      width={500}
-                      height={300}
+                      width={852}
+                      height={200}
                       // fill
-                      className="h-full w-full rounded-md object-cover dark:opacity-80"
+                      className="w-full rounded-md object-cover dark:opacity-80"
                     />
                   </Link>
                 </AspectRatio>
                 <AspectRatio ratio={21 / 5} className="bg-muted mt-2">
                   <Link href="https://example.com" target="_blank">
                     <Image
-                      src="/images/banner-webplanning.png"
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2.jpg`}
                       alt="Photo by Drew Beamer"
-                      width={500}
-                      height={300}
+                      width={852}
+                      height={200}
                       // fill
-                      className="h-full w-full rounded-md object-cover dark:opacity-80"
+                      className="w-full rounded-md object-cover dark:opacity-80"
                     />
                   </Link>
                 </AspectRatio>
               </div>
             </CardHeader>
             <CardContent className="p-6 text-sm">
-              <div className="grid gap-3">
-                <div className="font-semibold">Order Details</div>
-                <ul className="grid gap-3">
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                      Glimmer Lamps x <span>2</span>
-                    </span>
-                    <span>$250.00</span>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                      Aqua Filters x <span>1</span>
-                    </span>
-                    <span>$49.00</span>
-                  </li>
-                </ul>
-                <Separator className="my-2" />
-                <ul className="grid gap-3">
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Subtotal</span>
-                    <span>$299.00</span>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Shipping</span>
-                    <span>$5.00</span>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Tax</span>
-                    <span>$25.00</span>
-                  </li>
-                  <li className="flex items-center justify-between font-semibold">
-                    <span className="text-muted-foreground">Total</span>
-                    <span>$329.00</span>
-                  </li>
-                </ul>
-              </div>
-              <Separator className="my-4" />
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-3">
-                  <div className="font-semibold">Shipping Information</div>
-                  <address className="grid gap-0.5 not-italic text-muted-foreground">
-                    <span>Liam Johnson</span>
-                    <span>1234 Main St.</span>
-                    <span>Anytown, CA 12345</span>
-                  </address>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-2">
+                  <div className="font-semibold">Front-end Framework</div>
+                  <div className="grid gap-0.5 text-muted-foreground">
+                    <span className="font-semibold">Next.js</span>
+                    <span>(The React Framework)</span>
+                  </div>
                 </div>
-                <div className="grid auto-rows-max gap-3">
-                  <div className="font-semibold">Billing Information</div>
-                  <div className="text-muted-foreground">
-                    Same as shipping address
+                <div className="grid auto-rows-max gap-2">
+                  <div className="font-semibold">UI library</div>
+                  <div className="grid gap-0.5 text-muted-foreground">
+                    <span className="font-semibold">shadcn/ui</span>
+                    <span>(Designed Components)</span>
                   </div>
                 </div>
               </div>
               <Separator className="my-4" />
-              <div className="grid gap-3">
-                <div className="font-semibold">Customer Information</div>
-                <dl className="grid gap-3">
+              <div className="grid gap-2">
+                <div className="grid gap-2">
+                  <div className="font-semibold">Back-End</div>
+                  <div className="grid gap-0.5 text-muted-foreground">
+                    <span className="font-semibold">Supabase</span>
+                    <span>(Open source database hosting)</span>
+                  </div>
+                </div>
+              </div>
+              <Separator className="my-4" />
+              <div className="grid gap-2">
+                <div className="font-semibold">메일</div>
+                <dl className="grid gap-2">
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">Customer</dt>
-                    <dd>Liam Johnson</dd>
+                    <dt>Data Fetch</dt>
+                    <dd className="text-muted-foreground">메일 리스트 내용 데이터</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">Email</dt>
-                    <dd>
-                      <a href="mailto:">liam@acme.com</a>
-                    </dd>
+                    <dt>Jotai v2</dt>
+                    <dd className="text-muted-foreground">React 상태 관리</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">Phone</dt>
-                    <dd>
-                      <a href="tel:">+1 234 567 890</a>
-                    </dd>
+                    <dt>resizable-panels</dt>
+                    <dd className="text-muted-foreground">크기 조절 가능한 패널 그룹</dd>
                   </div>
                 </dl>
               </div>
               <Separator className="my-4" />
-              <div className="grid gap-3">
-                <div className="font-semibold">Payment Information</div>
-                <dl className="grid gap-3">
+              <div className="grid gap-2">
+                <div className="font-semibold">공지 게시판</div>
+                <dl className="grid gap-2">
                   <div className="flex items-center justify-between">
-                    <dt className="flex items-center gap-1 text-muted-foreground">
-                      <CreditCard className="h-4 w-4" />
-                      Visa
-                    </dt>
-                    <dd>**** **** **** 4532</dd>
+                    <dt>Data Fetch</dt>
+                    <dd className="text-muted-foreground">공지 게시판 데이터</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt>Badge Type</dt>
+                    <dd className="text-muted-foreground">그룹, 사내 Badge</dd>
+                  </div>
+                </dl>
+              </div>
+              <Separator className="my-4" />
+              <div className="grid gap-2">
+                <div className="font-semibold">임직원 검색</div>
+                <dl className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <dt>Data Fetch</dt>
+                    <dd className="text-muted-foreground">임직원 리스트 데이터</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt>Search Filter</dt>
+                    <dd className="text-muted-foreground">실시간 검색 URL 업데이트</dd>
+                  </div>
+                </dl>
+              </div>
+              <Separator className="my-4" />
+              <div className="grid gap-2">
+                <div className="font-semibold">로그인</div>
+                <dl className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <dt>Users Authentication</dt>
+                    <dd className="text-muted-foreground">로그인 인증 권한부여</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt>Sign up</dt>
+                    <dd className="text-muted-foreground">이메일 인증을 통한 회원가입</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt>Reset Password</dt>
+                    <dd className="text-muted-foreground">이메일 인증을 통한 비밀번호 리셋</dd>
+                  </div>
+                </dl>
+              </div>
+              <Separator className="my-4" />
+              <div className="grid gap-2">
+                <div className="font-semibold">레이아웃/테마</div>
+                <dl className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <dt>Dark mode</dt>
+                    <dd className="text-muted-foreground">다크모드 테마 적용</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt>Responsive Web</dt>
+                    <dd className="text-muted-foreground">반응형 레이아웃</dd>
                   </div>
                 </dl>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+            {/* <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
               <div className="text-xs text-muted-foreground">
                 Updated <time dateTime="2023-11-23">November 23, 2023</time>
               </div>
@@ -488,7 +505,7 @@ export default async function Dashboard() {
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </div>
       </main>

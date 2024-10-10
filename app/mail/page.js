@@ -1,5 +1,5 @@
 import { Mail } from "@/app/mail/components/mail";
-import { createClientMail } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 
 export default async function MailPage() {
@@ -11,7 +11,7 @@ export default async function MailPage() {
 
 	// mails 데이터 가져오기
 	const cookieStore = cookies();
-	const supabase = createClientMail(cookieStore);
+	const supabase = createClient(cookieStore);
 	const { data: mailsData } = await supabase.from('mails').select('*');
 	
 	return (

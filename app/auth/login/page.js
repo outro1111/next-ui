@@ -32,7 +32,7 @@ export default function LoginPage({ searchParams }) {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">비밀번호</Label>
-                <Link href="/auth/submit-email-recover" className="ml-auto inline-block text-sm underline">비밀번호를 잊으셨나요?</Link>
+                <Link prefetch={true} href="/auth/submit-email-recover" className="ml-auto inline-block text-sm underline">비밀번호를 잊으셨나요?</Link>
               </div>
               <Input id="password" type="password" name="password" required autoComplete="on" />
             </div>
@@ -47,7 +47,7 @@ export default function LoginPage({ searchParams }) {
           </div>
           <div className="mt-4 text-center text-sm">
             계정이 없으신가요?
-            <Link href="/auth/signup" className="pl-1 underline">가입하기</Link>
+            <Link prefetch={true} href="/auth/signup" className="pl-1 underline">가입하기</Link>
           </div>
         </form>
       </CardContent>

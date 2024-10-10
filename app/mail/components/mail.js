@@ -23,11 +23,10 @@ export function Mail({ mails, defaultLayout = [10, 32, 48], defaultCollapsed = f
 		if (window.innerWidth < 768) {
 			setIsCollapsed(true);
 			document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
+		}else {
+			setIsCollapsed(false);
+			document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
 		}
-		// else {
-		// 	setIsCollapsed(false);
-		// 	document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
-		// }
 	};
 
 	useEffect(() => {
@@ -40,7 +39,7 @@ export function Mail({ mails, defaultLayout = [10, 32, 48], defaultCollapsed = f
 	
 		// 클린업
 		return () => window.removeEventListener('resize', handleResize);
-	}, [setIsCollapsed]);
+	}, [isCollapsed]);
 	
 
 	return (
@@ -60,13 +59,13 @@ export function Mail({ mails, defaultLayout = [10, 32, 48], defaultCollapsed = f
 					minSize={15}
 					maxSize={20}
 					onCollapse={() => {
-						setIsCollapsed(true);
-						document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
+						// setIsCollapsed(true);
+						// document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`;
 					}}
 					onResize={() => {
-							setIsCollapsed(false);
-							document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
-							// handleResize();
+							// setIsCollapsed(false);
+							// document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
+							handleResize();
 					}}
 					className={cn("h-[calc(100vh-56px)] min-w-[150px]",
 						isCollapsed ? "min-w-[50px] max-w-[50px] md:max-w-[200px] transition-all duration-300 ease-in-out border-r" : "",

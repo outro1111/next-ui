@@ -55,15 +55,15 @@ export default async function MembersPage({ searchParams: {name} }) {
         <div className="space-y-4">
           <h4 className="text-sm font-medium">임직원 <strong className="text-blue-500">{ filteredMembers.length }</strong>명</h4>
           {filteredMembers.length ? 
-            <div className="grid gap-4">
+            <div className="grid gap-6">
             {filteredMembers.map((member, index) => (
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-center  justify-between gap-4" key={ member.seq }>
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-center  justify-between gap-4" key={ member.memb_id }>
                 <div className="flex gap-4 col-span-2">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={`/images/avatars/0${member.seq}.png`} />
-                    <AvatarFallback>{ member.seq }</AvatarFallback>
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/member_avatar/${member.memb_id}.png`} />
+                    <AvatarFallback>{ member.memb_id }</AvatarFallback>
                   </Avatar>
-                  <div className="grid gap-1">
+                  <div className="grid gap-1 content-center">
                     <p className="text-base font-medium leading-none">{ member.name }</p>
                     <p className="text-sm text-muted-foreground">{ member.mail_addr }</p>
                   </div>
@@ -73,7 +73,7 @@ export default async function MembersPage({ searchParams: {name} }) {
                 </div>
                 <div className="gap-1 hidden md:grid">
                   <p className="text-sm font-medium">{ member.position }</p>
-                  <p className="text-sm text-muted-foreground">웹/개발 운영</p>
+                  <p className="text-sm text-muted-foreground">{ member.job }</p>
                 </div>
                 <div className="flex justify-end gap-4 mr-6 hidden lg:flex">
                   <Button variant="ghost" size="icon"><Star /></Button>
