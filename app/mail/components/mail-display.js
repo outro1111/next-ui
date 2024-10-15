@@ -159,7 +159,7 @@ export function MailDisplay({ item }) {
 					<div className="flex items-start p-4">
 						<div className="flex items-start gap-4 text-sm">
 							<Avatar>
-								<AvatarImage alt={item.name} />
+								<AvatarImage alt={item.name} src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/member_avatar/${item.name_id}.png`} />
 								<AvatarFallback>
 									{item.name
 										.split(" ")

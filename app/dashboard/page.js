@@ -84,9 +84,7 @@ import {
 } from "@/components/ui/tooltip"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 // supabase
-import { createClientList } from '@/utils/supabase/server'
 import { createClient } from '@/utils/supabase/server'
-import { createClientMail } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 // 날짜 포맷
 import { useFormatDate } from "@/utils/useFormatDate"
@@ -97,14 +95,14 @@ export default async function Dashboard() {
   const {formatDateHour} = useFormatDate() // 리뷰 날짜 시간 포맷팅
   // supabase
   const cookieStore = cookies()
-  const supabaseList = createClientList(cookieStore)
-  const { data: bbsLists } = await supabaseList.from('bbs').select()
+  const supabaseList = createClient(cookieStore)
+  const { data: bbsLists } = await supabaseList.from('bbs_list').select().limit(3).order('id', { ascending: false });
 
   const supabaseUser = createClient()
   const { data: getUser, error } = await supabaseUser.auth.getUser()
 
-  const supabase = createClientMail(cookieStore);
-	const { data: mailsData } = await supabase.from('mails').select('*').limit(10);
+  const supabaseMail = createClient(cookieStore);
+	const { data: mailsData } = await supabaseMail.from('mails').select('*').order('date', { ascending: false }).limit(10);
 
   function getBadgeVariantFromLabel(label) {
     if (["업무"].includes(label)) {
@@ -126,7 +124,7 @@ export default async function Dashboard() {
           <span>{bbsList.title}</span>
         </p>
       ))} */}
-      <main className="grid flex-1 items-start gap-4 p-5 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+      <main className="grid flex-1 items-start gap-4 p-5 sm:pt-1 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
@@ -160,7 +158,7 @@ export default async function Dashboard() {
                           </Link>
                         </TableCell>
                         <TableCell className="py-0 px-1 hidden 2xl:table-cell">
-                          <Link prefetch={true} href="/mail" className="block p-3">
+                          <Link prefetch={true} href="/list" className="block p-3">
                             { formatDate(bbsList.created_at) }
                           </Link>
                         </TableCell>
@@ -307,10 +305,10 @@ export default async function Dashboard() {
               <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-52">보낸사람</TableHead>
+                    <TableHead className="w-24 md:w-32 2xl:w-40">보낸사람</TableHead>
                     <TableHead>제목</TableHead>
-                    <TableHead className="w-56 hidden lg:table-cell">타입</TableHead>
-                    <TableHead className="w-52 hidden xl:table-cell">날짜</TableHead>
+                    <TableHead className="w-56 hidden xl:table-cell">타입</TableHead>
+                    <TableHead className="w-44 hidden lg:table-cell">날짜</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -325,7 +323,7 @@ export default async function Dashboard() {
                           { mails.subject }
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 px-1 hidden lg:table-cell">
+                      <TableCell className="p-0 px-1 hidden xl:table-cell">
                         <Link prefetch={true} href="/mail" className="block font-medium p-3">
                           {mails.labels.length ? (
                             <div className="flex items-center gap-1">
@@ -338,7 +336,7 @@ export default async function Dashboard() {
                           ) : null}
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 px-1 hidden xl:table-cell">
+                      <TableCell className="p-0 px-1 hidden lg:table-cell">
                         <Link prefetch={true} href="/mail" className="block p-3">{ formatDateHour(mails.date) }</Link>
                       </TableCell>
                     </TableRow>
@@ -350,30 +348,51 @@ export default async function Dashboard() {
         </div>
         <div>
           <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-            <CardHeader className="flex flex-row items-start bg-muted/50">
+            <CardHeader className="flex flex-row items-start p-5 pb-6 bg-muted/50">
               <div className="grid gap-0.5 w-full">
                 <AspectRatio ratio={21 / 5} className="bg-muted">
+                  <Link href="https://www.figma.com/design/UZUM25Tc5mFWeWp7wR0QQk/%EC%8A%A4%ED%84%B0%EB%94%94-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=78-3&node-type=canvas&t=pwfMhxxKO7fwIqkQ-0" target="_blank">
+                    <Image
+                      // src="/images/banner-1.jpg"
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1.svg`}
+                      alt="Style Guide"
+                      width={852}
+                      height={200}
+                      // fill
+                      className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
+                    />
+                  </Link>
                   <Link href="https://example.com" target="_blank">
                     <Image
                       // src="/images/banner-1.jpg"
-                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1.jpg`}
-                      alt="Photo by Drew Beamer"
-                      width={852}
-                      height={200}
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1-m.svg`}
+                      alt="Style Guide"
+                      width={240}
+                      height={57}
                       // fill
-                      className="w-full rounded-md object-cover dark:opacity-80"
+                      className="w-full rounded-xl object-cover sm:hidden lg:block xl:hidden"
                     />
                   </Link>
                 </AspectRatio>
-                <AspectRatio ratio={21 / 5} className="bg-muted mt-2">
-                  <Link href="https://example.com" target="_blank">
+                <AspectRatio ratio={21 / 5} className="bg-muted pt-2">
+                  <Link href="https://cjics.cj.net/confluence/display/NextjsPJT" target="_blank">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2.jpg`}
-                      alt="Photo by Drew Beamer"
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2.svg`}
+                      alt="Web planning"
                       width={852}
                       height={200}
                       // fill
-                      className="w-full rounded-md object-cover dark:opacity-80"
+                      className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
+                    />
+                  </Link>
+                  <Link href="https://example.com" target="_blank">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2-m.svg`}
+                      alt="Web planning"
+                      width={240}
+                      height={57}
+                      // fill
+                      className="w-full rounded-xl object-cover sm:hidden lg:block xl:hidden"
                     />
                   </Link>
                 </AspectRatio>
@@ -419,7 +438,7 @@ export default async function Dashboard() {
                     <dd className="text-muted-foreground">React 상태 관리</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt>resizable-panels</dt>
+                    <dt>Resizable-panels</dt>
                     <dd className="text-muted-foreground">크기 조절 가능한 패널 그룹</dd>
                   </div>
                 </dl>
@@ -462,7 +481,7 @@ export default async function Dashboard() {
                   </div>
                   <div className="flex items-center justify-between">
                     <dt>Sign up</dt>
-                    <dd className="text-muted-foreground">이메일 인증을 통한 회원가입</dd>
+                    <dd className="text-muted-foreground">이메일과 비밀번호로 회원가입</dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt>Reset Password</dt>
@@ -485,30 +504,14 @@ export default async function Dashboard() {
                 </dl>
               </div>
             </CardContent>
-            {/* <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-              <div className="text-xs text-muted-foreground">
-                Updated <time dateTime="2023-11-23">November 23, 2023</time>
-              </div>
-              <Pagination className="ml-auto mr-0 w-auto">
-                <PaginationContent>
-                  <PaginationItem>
-                    <Button size="icon" variant="outline" className="h-6 w-6">
-                      <ChevronLeft className="h-3.5 w-3.5" />
-                      <span className="sr-only">Previous Order</span>
-                    </Button>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <Button size="icon" variant="outline" className="h-6 w-6">
-                      <ChevronRight className="h-3.5 w-3.5" />
-                      <span className="sr-only">Next Order</span>
-                    </Button>
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </CardFooter> */}
           </Card>
         </div>
       </main>
     </>
   )
+}
+
+export const metadata = {
+  title: "Cellink | Dashboard",
+  description: "Dashboard",
 }

@@ -182,7 +182,7 @@ export function Nav({withoutTokenUrls}) {
                     className="hidden dark:block"
                   />
                 </div>
-                <span className="sr-only">UI Company</span>
+                <span className="sr-only">Cellink</span>
               </div>
               <SheetClose asChild>
                 <Link
@@ -241,7 +241,24 @@ export function Nav({withoutTokenUrls}) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link prefetch={true} href="/">Cellink</Link>
+                <Link prefetch={true} href="/">
+                  <div className="w-24 ml-2">
+                    <Image
+                      src="/images/logo-b.svg"
+                      alt="Cellink"
+                      width={500}
+                      height={300}
+                      className="block dark:hidden"
+                    />
+                    <Image
+                      src="/images/logo-w.svg"
+                      alt="Cellink"
+                      width={500}
+                      height={300}
+                      className="hidden dark:block"
+                    />
+                  </div>
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />

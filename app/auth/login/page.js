@@ -49,8 +49,23 @@ export default function LoginPage({ searchParams }) {
             계정이 없으신가요?
             <Link prefetch={true} href="/auth/signup" className="pl-1 underline">가입하기</Link>
           </div>
+          <div className="flex mt-3 justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-baseline gap-1">
+              <div className="text-xs text-muted-foreground">email :</div> 
+              <div>azasu0501@cj.net</div>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <div className="text-xs text-muted-foreground">password :</div> 
+              <div>test123</div>
+            </div>
+          </div>
         </form>
       </CardContent>
     </Card>
   )
+}
+
+export const metadata = {
+  title: "Cellink | 로그인",
+  description: "로그인",
 }

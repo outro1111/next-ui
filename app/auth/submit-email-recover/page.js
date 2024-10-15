@@ -48,3 +48,8 @@ export default function ReserPage({ searchParams }) {
     </Card>
   )
 }
+
+export const metadata = {
+  title: "Cellink | 비밀번호 복구",
+  description: "비밀번호 복구",
+}

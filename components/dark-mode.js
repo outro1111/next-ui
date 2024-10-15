@@ -40,15 +40,15 @@ export default function DarkMode({ tooltip }) {
             <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="flex h-9 w-9 text-muted-foreground hover:bg-accent/0">
               {theme === 'dark'
-                ? <><Moon className="h-5 w-5" /><span className="sr-only">다크 모드</span></>
-                : <><Sun className="h-5 w-5" /><span className="sr-only">라이트 모드</span></>
+                ? <><Sun className="h-5 w-5" /><span className="sr-only">라이트 모드</span></>
+                : <><Moon className="h-5 w-5" /><span className="sr-only">다크 모드</span></>
               }
             </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
               {theme === 'dark'
-                ? <span>다크 모드</span>
-                : <span>라이트 모드</span>
+                ? <span>라이트 모드</span>
+                : <span>다크 모드</span>
               }
             </TooltipContent>
           </Tooltip>
@@ -61,8 +61,8 @@ export default function DarkMode({ tooltip }) {
             onClick={toggleDarkMode} 
           >
             {theme === 'dark'
-              ? <><Moon className="h-5 w-5" /> 다크 모드</>
-              : <><Sun className="h-5 w-5" /> 라이트 모드</>
+              ? <><Sun className="h-5 w-5" /> 라이트 모드</>
+              : <><Moon className="h-5 w-5" /> 다크 모드</>
             }
           </Link>
         </SheetClose>

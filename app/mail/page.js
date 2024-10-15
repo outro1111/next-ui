@@ -12,7 +12,7 @@ export default async function MailPage() {
 	// mails 데이터 가져오기
 	const cookieStore = cookies();
 	const supabase = createClient(cookieStore);
-	const { data: mailsData } = await supabase.from('mails').select('*');
+	const { data: mailsData } = await supabase.from('mails').select('*').order('date', { ascending: false });
 	
 	return (
 		<>
@@ -21,4 +21,9 @@ export default async function MailPage() {
 			</div>
 		</>
 	);
+}
+
+export const metadata = {
+  title: "Cellink | 메일",
+  description: "메일",
 }

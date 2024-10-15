@@ -9,6 +9,6 @@ export default function MoviesPage() {
 }
 
 export const metadata = {
-  title: "Dashboard | Dashboard",
+  title: "Cellink | Dashboard",
   description: "Dashboard",
 }

@@ -10,6 +10,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -27,9 +28,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 // supabase
-import { createClientList } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 // 날짜 포맷
 import { useFormatDate } from "@/utils/useFormatDate"
@@ -38,14 +48,14 @@ export default async function ListPage() {
   const {formatDate} = useFormatDate() // 리뷰 날짜 포맷팅
   // supabase
   const cookieStore = cookies()
-  const supabase = createClientList(cookieStore)
-  const { data: bbsLists } = await supabase.from('bbs').select()
+  const supabase = createClient(cookieStore)
+  const { data: bbsLists } = await supabase.from('bbs_list').select().order('id', { ascending: false })
 
   return (
     <>
     {/* <pre>{JSON.stringify(bbsLists, null, 2)}</pre> */}
 
-    <div className="h-full p-5 sm:px-6">
+    <div className="h-full p-5 sm:pt-1 sm:px-6">
       <Card>
         <CardHeader>
           <CardTitle>공지 게시판</CardTitle>
@@ -75,31 +85,66 @@ export default async function ListPage() {
             <TableBody>
               {bbsLists.map((bbsList, index) => (
                 <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
-                  <TableCell className="py-3">
-                    <div className="font-medium truncate"><Link href="#">{ bbsList.title }</Link></div>
+                  <TableCell className="py-0 px-1">
+                    <Link href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
                   </TableCell>
-                  <TableCell className="py-3 text-center">
-                    <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
-                      { bbsList.type }
-                    </Badge>
+                  <TableCell className="py-0 px-1 text-center">
+                    <Link href="/list" className="block truncate p-3">
+                      <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
+                        { bbsList.type }
+                      </Badge>
+                    </Link>
                   </TableCell>
-                  <TableCell className="py-3 text-center hidden md:table-cell">
-                    홍길동님
+                  <TableCell className="py-0 px-1 text-center hidden md:table-cell">
+                    <Link href="/list" className="block p-3">
+                      { bbsList.writer }
+                    </Link>
                   </TableCell>
-                  <TableCell className="py-3 text-center hidden md:table-cell">
-                    { formatDate(bbsList.created_at) }
+                  <TableCell className="py-0 px-1 text-center hidden md:table-cell">
+                    <Link href="/list" className="block p-3">
+                      { formatDate(bbsList.created_at) }
+                    </Link>
                   </TableCell>
-                  <TableCell className="py-3 text-center hidden lg:table-cell">
-                    123
+                  <TableCell className="py-0 px-1 text-center hidden lg:table-cell">
+                    <Link href="/list" className="block p-3"> 
+                      { bbsList.view_count }
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          <Separator className="mb-6" />
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#" isActive>1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">
+                  2
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">3</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </CardContent>
       </Card>
     </div>
 
     </>
   )
+}
+
+export const metadata = {
+  title: "Cellink | 공지 게시판",
+  description: "공지 게시판",
 }

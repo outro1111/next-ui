@@ -69,3 +69,8 @@ export default function SignupForm() {
     </Card>
   )
 }
+
+export const metadata = {
+  title: "Cellink | 회원가입",
+  description: "회원가입",
+}

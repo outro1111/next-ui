@@ -26,7 +26,7 @@ import SearchInput from "./components/search"
 export default async function MembersPage({ searchParams: {name} }) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
-  const { data: members } = await supabase.rpc('get_all_memeber')
+  const { data: members } = await supabase.rpc('get_all_memeber').order('name', { ascending: true });
 
   let filteredMembers;
   if (name) { // name이 있을 경우 조건에 맞는 데이터 필터링
@@ -39,7 +39,7 @@ export default async function MembersPage({ searchParams: {name} }) {
     <>
     {/* <pre>{JSON.stringify(members, null, 2)}</pre> */}
 
-    <div className="h-full p-5 sm:px-6">
+    <div className="h-full p-5 sm:pt-1 sm:px-6">
     <Card>
       <CardHeader>
         <CardTitle>임직원 검색</CardTitle>
@@ -51,9 +51,8 @@ export default async function MembersPage({ searchParams: {name} }) {
         <div className="flex space-x-2">
           <SearchInput />
         </div>
-        <Separator className="my-4" />
-        <div className="space-y-4">
-          <h4 className="text-sm font-medium">임직원 <strong className="text-blue-500">{ filteredMembers.length }</strong>명</h4>
+        <div className="space-y-4 my-4 sm:m-4">
+          <h4 className="text-sm font-medium py-2">임직원 <strong className="text-blue-500">{ filteredMembers.length }</strong>명</h4>
           {filteredMembers.length ? 
             <div className="grid gap-6">
             {filteredMembers.map((member, index) => (
@@ -93,4 +92,9 @@ export default async function MembersPage({ searchParams: {name} }) {
 
     </>
   )
+}
+
+export const metadata = {
+  title: "Cellink | 임직원 검색",
+  description: "임직원 검색",
 }
