@@ -1,15 +1,3 @@
-import {
-  Star,
-  SquarePen,
-  MessageCircleMore
-} from "lucide-react"
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
@@ -28,15 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+
+import PaginationUI from "@/components/pagination"
 
 // supabase
 import { createClient } from '@/utils/supabase/server'
@@ -44,12 +25,14 @@ import { cookies } from 'next/headers'
 // 날짜 포맷
 import { useFormatDate } from "@/utils/useFormatDate"
 
-export default async function ListPage() {
+export default async function ListPage({ searchParams: {page = 1} }) {
   const {formatDate} = useFormatDate() // 리뷰 날짜 포맷팅
+  const itemsPerPage = 10 // 한페이지 불러올 게시글 수
   // supabase
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
-  const { data: bbsLists } = await supabase.from('bbs_list').select().order('id', { ascending: false })
+  
+  const { data: bbsLists, count } = await supabase.from('bbs_list').select('*', { count: 'exact' }).order('id', { ascending: false }).range((page - 1) * itemsPerPage, page * itemsPerPage - 1)
 
   return (
     <>
@@ -85,28 +68,28 @@ export default async function ListPage() {
             <TableBody>
               {bbsLists.map((bbsList, index) => (
                 <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
-                  <TableCell className="py-0 px-1">
-                    <Link href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
+                  <TableCell className="p-0">
+                    <Link prefetch={true} href={`/list/${bbsList.id}`} className="block font-medium truncate p-3 pl-4">{ bbsList.title }</Link>
                   </TableCell>
-                  <TableCell className="py-0 px-1 text-center">
-                    <Link href="/list" className="block truncate p-3">
+                  <TableCell className="p-0 text-center">
+                    <Link href={`/list/${bbsList.id}`} className="block truncate p-3">
                       <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
                         { bbsList.type }
                       </Badge>
                     </Link>
                   </TableCell>
-                  <TableCell className="py-0 px-1 text-center hidden md:table-cell">
-                    <Link href="/list" className="block p-3">
+                  <TableCell className="p-0 text-center hidden md:table-cell">
+                    <Link href={`/list/${bbsList.id}`} className="block p-3">
                       { bbsList.writer }
                     </Link>
                   </TableCell>
-                  <TableCell className="py-0 px-1 text-center hidden md:table-cell">
-                    <Link href="/list" className="block p-3">
+                  <TableCell className="p-0 text-center hidden md:table-cell">
+                    <Link href={`/list/${bbsList.id}`} className="block p-3">
                       { formatDate(bbsList.created_at) }
                     </Link>
                   </TableCell>
-                  <TableCell className="py-0 px-1 text-center hidden lg:table-cell">
-                    <Link href="/list" className="block p-3"> 
+                  <TableCell className="p-0 text-center hidden lg:table-cell">
+                    <Link href={`/list/${bbsList.id}`} className="block p-3"> 
                       { bbsList.view_count }
                     </Link>
                   </TableCell>
@@ -115,27 +98,8 @@ export default async function ListPage() {
             </TableBody>
           </Table>
           <Separator className="mb-6" />
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          {/* <PaginationUI /> */}
+          <PaginationUI currentPage={page} totalCount={count} itemsPerPage={itemsPerPage} />
         </CardContent>
       </Card>
     </div>

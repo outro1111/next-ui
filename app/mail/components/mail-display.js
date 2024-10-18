@@ -3,7 +3,7 @@ import addHours from "date-fns/addHours";
 import format from "date-fns/format";
 import nextSaturday from "date-fns/nextSaturday";
 import { ko } from 'date-fns/locale';
-import { Archive, ArchiveX, Clock, Forward, MoreVertical, Reply, ReplyAll, Trash2, ChevronLeft  } from "lucide-react";
+import { Archive, ArchiveX, Clock, Forward, MoreVertical, Reply, ReplyAll, Trash2, ChevronLeft, MailOpen } from "lucide-react";
 
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -197,7 +197,10 @@ export function MailDisplay({ item }) {
 					</div>
 				</div>
 			) : (
-				<div className="p-8 text-center text-muted-foreground">선택된 메일이 없습니다.</div>
+				<div className="px-8 py-20 text-center text-muted-foreground">
+					<div className="flex justify-center py-3"><MailOpen className="h-6 w-6 stroke-slate-400" /></div>
+					<div>선택된 메일이 없습니다.</div>
+				</div>
 			)}
 		</div>
 	);

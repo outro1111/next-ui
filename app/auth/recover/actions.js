@@ -7,6 +7,11 @@ export async function recoverPassword(formData) {
     const password = formData.get('password');
     const supabase = createClient();
 
+    // 서버단에서도 assword length 확인
+    if(password.length < 6){
+        redirect('/error?message=confirm your recover password please')
+    }
+    
     // getUser()로 사용자 정보 검증
     const { data: user, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {

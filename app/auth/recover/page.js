@@ -24,7 +24,7 @@ export default function ReserPage({ searchParams }) {
               <div className="flex items-center">
                 <Label htmlFor="password">비밀번호</Label>
               </div>
-              <Input id="password" type="password" name="password" require dautoComplete="on" />
+              <Input id="password" type="password" name="password" required dautoComplete="on" minLength={6}/>
             </div>
             <Button className="w-full" formAction={recoverPassword}>
               비밀번호 복구

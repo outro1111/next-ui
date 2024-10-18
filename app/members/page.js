@@ -17,10 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from "next/headers"
-import { Separator } from "@/components/ui/separator"
 import SearchInput from "./components/search"
 
 export default async function MembersPage({ searchParams: {name} }) {

@@ -35,11 +35,11 @@ export default function SignupForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="department">부서</Label>
-                  <Input id="department" name="department" placeholder="Web/App dev"/>
+                  <Input id="department" name="department" required placeholder="Web/App dev"/>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="position">직급</Label>
-                  <Input id="position" name="position" placeholder="P4"/>
+                  <Input id="position" name="position" required placeholder="P4"/>
                 </div>
               </div>
               <div className="grid gap-2">
@@ -54,7 +54,7 @@ export default function SignupForm() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">비밀번호</Label>
-                <Input id="password" type="password" name="password" autoComplete="on" />
+                <Input id="password" type="password" name="password" autoComplete="on" required minLength={6}/>
               </div>
               <Button type="submit" className="w-full" formAction={signup}>
                 계정 생성

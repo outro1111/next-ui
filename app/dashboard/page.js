@@ -1,39 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
   CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
-  DollarSign,
   Users,
-  Activity,
   AlarmClockCheck,
   Command
 } from "lucide-react"
-
 import { Badge } from "@/components/ui/badge"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -43,24 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination"
-import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import {
   Table,
   TableBody,
@@ -69,12 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Tooltip,
@@ -129,7 +79,7 @@ export default async function Dashboard() {
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
               <CardHeader className="pb-3">
-                <CardTitle>공지 게시판</CardTitle>
+                <CardTitle><Link prefetch={true} href="/list">공지 게시판</Link></CardTitle>
               </CardHeader>
               <CardContent>
               <Table className="table-fixed">
@@ -147,18 +97,18 @@ export default async function Dashboard() {
                   <TableBody>
                     {bbsLists.map((bbsList, index) => (
                       <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
-                        <TableCell className="py-0 px-1">
-                          <Link prefetch={true} href="/list" className="block font-medium truncate p-3">{ bbsList.title }</Link>
+                        <TableCell className="p-0">
+                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block font-medium truncate p-3 pl-4">{ bbsList.title }</Link>
                         </TableCell>
-                        <TableCell className="py-0 px-1 hidden xl:table-cell">
-                          <Link prefetch={true} href="/list" className="block truncate p-3">
+                        <TableCell className="p-0 hidden xl:table-cell">
+                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block truncate p-3">
                             <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
                               { bbsList.type }
                             </Badge>
                           </Link>
                         </TableCell>
-                        <TableCell className="py-0 px-1 hidden 2xl:table-cell">
-                          <Link prefetch={true} href="/list" className="block p-3">
+                        <TableCell className="p-0 hidden 2xl:table-cell">
+                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block p-3">
                             { formatDate(bbsList.created_at) }
                           </Link>
                         </TableCell>
@@ -293,7 +243,7 @@ export default async function Dashboard() {
           </div>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between flex-wrap px-7">
-              <CardTitle>받은 메일</CardTitle>
+              <CardTitle><Link prefetch={true} href="/mail">받은 메일</Link></CardTitle>
               <Button variant="outline" size="sm">
                 <Link prefetch={true} href="/mail">메일쓰기</Link>
               </Button>
@@ -314,16 +264,16 @@ export default async function Dashboard() {
                 <TableBody>
                   {mailsData.map((mails, index) => (
                     <TableRow className={`${!mails.read ? "bg-accent" : ""}`} key={ mails.id }>
-                      <TableCell className="py-0 px-1">
-                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3">{ mails.name }</Link>
+                      <TableCell className="p-0">
+                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3 pl-4">{ mails.name }</Link>
                       </TableCell>
-                      <TableCell className="p-0 px-1">
+                      <TableCell className="p-0">
                         <Link prefetch={true} href="/mail" className="block font-medium truncate p-3">
                           {!mails.read && <span className="inline-block h-2 w-2 mr-1 rounded-full bg-blue-600" />}  
                           { mails.subject }
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 px-1 hidden xl:table-cell">
+                      <TableCell className="p-0 hidden xl:table-cell">
                         <Link prefetch={true} href="/mail" className="block font-medium p-3">
                           {mails.labels.length ? (
                             <div className="flex items-center gap-1">
@@ -336,7 +286,7 @@ export default async function Dashboard() {
                           ) : null}
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 px-1 hidden lg:table-cell">
+                      <TableCell className="p-0 hidden lg:table-cell">
                         <Link prefetch={true} href="/mail" className="block p-3">{ formatDateHour(mails.date) }</Link>
                       </TableCell>
                     </TableRow>
@@ -350,8 +300,8 @@ export default async function Dashboard() {
           <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
             <CardHeader className="flex flex-row items-start p-5 pb-6 bg-muted/50">
               <div className="grid gap-0.5 w-full">
-                <AspectRatio ratio={21 / 5} className="bg-muted">
-                  <Link href="https://www.figma.com/design/UZUM25Tc5mFWeWp7wR0QQk/%EC%8A%A4%ED%84%B0%EB%94%94-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=78-3&node-type=canvas&t=pwfMhxxKO7fwIqkQ-0" target="_blank">
+                <AspectRatio ratio={21 / 5} className="rounded-xl">
+                  <Link href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/styleguide.pdf`} target="_blank">
                     <Image
                       // src="/images/banner-1.jpg"
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1.svg`}
@@ -361,8 +311,6 @@ export default async function Dashboard() {
                       // fill
                       className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
                     />
-                  </Link>
-                  <Link href="https://example.com" target="_blank">
                     <Image
                       // src="/images/banner-1.jpg"
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-1-m.svg`}
@@ -374,7 +322,7 @@ export default async function Dashboard() {
                     />
                   </Link>
                 </AspectRatio>
-                <AspectRatio ratio={21 / 5} className="bg-muted pt-2">
+                <AspectRatio ratio={21 / 5} className="mt-2 rounded-xl">
                   <Link href="https://cjics.cj.net/confluence/display/NextjsPJT" target="_blank">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2.svg`}
@@ -384,8 +332,6 @@ export default async function Dashboard() {
                       // fill
                       className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
                     />
-                  </Link>
-                  <Link href="https://example.com" target="_blank">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2-m.svg`}
                       alt="Web planning"
@@ -452,8 +398,8 @@ export default async function Dashboard() {
                     <dd className="text-muted-foreground">공지 게시판 데이터</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt>Badge Type</dt>
-                    <dd className="text-muted-foreground">그룹, 사내 Badge</dd>
+                    <dt>Details Page</dt>
+                    <dd className="text-muted-foreground">동적 라우팅 상세 및 페이징</dd>
                   </div>
                 </dl>
               </div>

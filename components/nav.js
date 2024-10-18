@@ -8,7 +8,6 @@ import {
   Mail,
   Menu,
   Package,
-  Package2,
   Search,
   Settings,
   Users2,
@@ -265,6 +264,9 @@ export function Nav({withoutTokenUrls}) {
             <BreadcrumbItem>
               <BreadcrumbPage>
                 {(() => {
+                  if (pathname.startsWith('/list')) {
+                    return '공지 게시판';
+                  }
                   switch (pathname) {
                     case '/':
                       return 'Dashboard';
@@ -272,8 +274,6 @@ export function Nav({withoutTokenUrls}) {
                       return 'Dashboard';
                     case '/mail':
                       return '메일';
-                    case '/list':
-                      return '공지 게시판';
                     case '/members':
                       return '임직원 검색';
                     default:

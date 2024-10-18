@@ -34,7 +34,7 @@ export default function LoginPage({ searchParams }) {
                 <Label htmlFor="password">비밀번호</Label>
                 <Link prefetch={true} href="/auth/submit-email-recover" className="ml-auto inline-block text-sm underline">비밀번호를 잊으셨나요?</Link>
               </div>
-              <Input id="password" type="password" name="password" required autoComplete="on" />
+              <Input id="password" type="password" name="password" required autoComplete="on" minLength={6}/>
             </div>
             {searchParams.message && (
               <div className="text-sm font-medium text-destructive">
