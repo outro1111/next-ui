@@ -163,7 +163,7 @@ export default async function Dashboard() {
                 </p>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" asChild>
                   <Link prefetch={true} href="/members">검색하기</Link>
                 </Button>
               </CardFooter>
@@ -244,7 +244,7 @@ export default async function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between flex-wrap px-7">
               <CardTitle><Link prefetch={true} href="/mail">받은 메일</Link></CardTitle>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" asChild>
                 <Link prefetch={true} href="/mail">메일쓰기</Link>
               </Button>
               <CardDescription className="basis-full">
