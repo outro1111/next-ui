@@ -2,7 +2,7 @@ import localFont from 'next/font/local'
 import "./globals.css";
 import { Nav } from '@/components/nav';
 import { ThemeProvider } from '@/components/theme-provider'
-import LoginUserEmail from '../components/loginUserEmail';
+// import LoginUserEmail from '../components/loginUserEmail';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -18,14 +18,15 @@ export default function RootLayout({ children }) {
   // 로그인하지 않고 접근 가능한 urls
   const withoutTokenUrls = ["/auth/login", "/auth/signup", "/auth/submit-email-recover", "/auth/recover", "/error"];
   // 로그인한 사용자가 존재할 경우, nav에 logout 버튼 표시
-  const loginUserEmail = LoginUserEmail();
+  // const loginUserEmail = LoginUserEmail();
 
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={pretendard.className}>
         <ThemeProvider attribute="class">
           <div className="flex min-h-screen w-full flex-col bg-muted/40 bg-[length:100%_auto] bg-no-repeat bg-[url('../public/images/main-bg.png')] dark:bg-none">
-            <Nav loginUserEmail={loginUserEmail} withoutTokenUrls={withoutTokenUrls}/>    
+            {/* <Nav loginUserEmail={loginUserEmail} withoutTokenUrls={withoutTokenUrls}/> */}
+            <Nav withoutTokenUrls={withoutTokenUrls}/>    
             <div className="flex flex-col sm:gap-4 sm:pl-14">
               {children}
             </div>
