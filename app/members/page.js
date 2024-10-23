@@ -25,10 +25,18 @@ export default async function MembersPage({ searchParams: {name} }) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
   const { data: members } = await supabase.rpc('get_all_memeber').order('name', { ascending: true });
+  // const { data: members } = await supabase.rpc('get_all_memeber');
+
+  const { data: membersName, error } = await supabase.rpc('get_memeber_from_name', {
+    v_name: name
+  });
 
   let filteredMembers;
   if (name) { // name이 있을 경우 조건에 맞는 데이터 필터링
-      filteredMembers = members.filter(member => member.name.toLowerCase().includes(name.toLowerCase()));
+      //filteredMembers = members.filter(member => member.name.toLowerCase().includes(name.toLowerCase()));
+
+      //function 호출 방법
+      filteredMembers = membersName
   } else { // name이 없을 경우 모든 멤버 반환
       filteredMembers = members;
   }
