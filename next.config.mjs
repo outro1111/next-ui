@@ -6,4 +6,9 @@ const nextConfig = {
   },
 };
 
+module.exports = {
+  // Other configuration settings
+  output: 'export',
+}
+
 export default nextConfig;
