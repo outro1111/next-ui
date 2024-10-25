@@ -75,7 +75,6 @@ export function Nav({withoutTokenUrls}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  prefetch={true}
                   href="/dashboard"
                   className={`${pathname === '/' || pathname === '/dashboard' ? 'bg-accent' : ''} flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                 >
@@ -90,7 +89,6 @@ export function Nav({withoutTokenUrls}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  prefetch={true}
                   href="/mail"
                   className={`${pathname === '/mail' ? 'bg-accent' : ''} flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                 >
@@ -105,7 +103,6 @@ export function Nav({withoutTokenUrls}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  prefetch={true}
                   href="/list"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 >
@@ -120,7 +117,6 @@ export function Nav({withoutTokenUrls}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  prefetch={true}
                   href="/members"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 >
@@ -185,7 +181,6 @@ export function Nav({withoutTokenUrls}) {
               </div>
               <SheetClose asChild>
                 <Link
-                  prefetch={true}
                   href="/dashboard"
                   className={`${pathname === '/' || pathname === '/dashboard' ? '' : 'text-muted-foreground'} flex items-center gap-4 px-2.5 hover:text-foreground`}
                 >
@@ -195,7 +190,6 @@ export function Nav({withoutTokenUrls}) {
               </SheetClose>
               <SheetClose asChild>
                 <Link
-                  prefetch={true}
                   href="/mail"
                   className={`${pathname === '/mail' ? '' : 'text-muted-foreground'} flex items-center gap-4 px-2.5 text-foreground`}
                 >
@@ -205,7 +199,6 @@ export function Nav({withoutTokenUrls}) {
               </SheetClose>
               <SheetClose asChild>
                 <Link
-                  prefetch={true}
                   href="/list"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
@@ -215,7 +208,6 @@ export function Nav({withoutTokenUrls}) {
               </SheetClose>
               <SheetClose asChild>
                 <Link
-                  prefetch={true}
                   href="/members"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
@@ -240,7 +232,7 @@ export function Nav({withoutTokenUrls}) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link prefetch={true} href="/">
+                <Link href="/">
                   <div className="w-24 ml-2">
                     <Image
                       src="/images/logo-b.svg"
