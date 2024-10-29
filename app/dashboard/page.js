@@ -74,8 +74,8 @@ export default async function Dashboard() {
           <span>{bbsList.title}</span>
         </p>
       ))} */}
-      <main className="grid flex-1 items-start gap-4 p-5 sm:pt-1 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+      <main className="grid items-start flex-1 gap-4 p-5 sm:pt-1 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+        <div className="grid items-start gap-4 auto-rows-max md:gap-8 lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="xl:col-span-2 2xl:col-span-3" x-chunk="dashboard-05-chunk-0">
               <CardHeader className="pb-3">
@@ -86,10 +86,10 @@ export default async function Dashboard() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>제목</TableHead>
-                      <TableHead className="w-24 hidden xl:table-cell">
+                      <TableHead className="hidden w-24 xl:table-cell">
                         구분
                       </TableHead>
-                      <TableHead className="w-32 hidden 2xl:table-cell">
+                      <TableHead className="hidden w-32 2xl:table-cell">
                       작성일
                       </TableHead>
                     </TableRow>
@@ -98,16 +98,16 @@ export default async function Dashboard() {
                     {bbsLists.map((bbsList, index) => (
                       <TableRow className={index === 0 ? "bg-accent" : ""} key={ bbsList.id }>
                         <TableCell className="p-0">
-                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block font-medium truncate p-3 pl-4">{ bbsList.title }</Link>
+                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block p-3 pl-4 font-medium truncate">{ bbsList.title }</Link>
                         </TableCell>
-                        <TableCell className="p-0 hidden xl:table-cell">
-                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block truncate p-3">
+                        <TableCell className="hidden p-0 xl:table-cell">
+                          <Link prefetch={true} href={`/list/${bbsList.id}`} className="block p-3 truncate">
                             <Badge className="text-xs" variant={ bbsList.type === "사내" ? "destructive" : "default" }>
                               { bbsList.type }
                             </Badge>
                           </Link>
                         </TableCell>
-                        <TableCell className="p-0 hidden 2xl:table-cell">
+                        <TableCell className="hidden p-0 2xl:table-cell">
                           <Link prefetch={true} href={`/list/${bbsList.id}`} className="block p-3">
                             { formatDate(bbsList.created_at) }
                           </Link>
@@ -128,17 +128,17 @@ export default async function Dashboard() {
                       <AvatarFallback>NA</AvatarFallback>
                     </Avatar>
                     <div className="grid gap-1">
-                      <div className="line-clamp-1 text-lg">Cellink</div>
-                      <div className="line-clamp-1 text-sm">
+                      <div className="text-lg line-clamp-1">Cellink</div>
+                      <div className="text-sm line-clamp-1">
                         <span className="font-medium">부서 :</span> { getUser.user.user_metadata.department }
                       </div>
-                      <div className="line-clamp-1 text-sm">
+                      <div className="text-sm line-clamp-1">
                         <span className="font-medium">직급 :</span> { getUser.user.user_metadata.position }
                       </div>
-                      <div className="line-clamp-1 text-sm">
+                      <div className="text-sm line-clamp-1">
                         <span className="font-medium">근무시간 :</span> 08:30_17:30
                       </div>
-                      <div className="line-clamp-1 text-sm">
+                      <div className="text-sm line-clamp-1">
                         <span className="font-medium">근무장소 :</span> 본사 4층
                       </div>
                     </div>
@@ -152,9 +152,9 @@ export default async function Dashboard() {
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-0">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-md font-semibold">임직원 검색</CardTitle>
-                <Users className="h-5 w-5 text-muted-foreground" />
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="font-semibold text-md">임직원 검색</CardTitle>
+                <Users className="w-5 h-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+270</div> */}
@@ -169,9 +169,9 @@ export default async function Dashboard() {
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-1">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-md font-semibold">회의실 예약</CardTitle>
-                <AlarmClockCheck className="h-5 w-5 text-muted-foreground" />
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="font-semibold text-md">회의실 예약</CardTitle>
+                <AlarmClockCheck className="w-5 h-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+5</div> */}
@@ -193,9 +193,9 @@ export default async function Dashboard() {
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-2">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-md font-semibold">eHR</CardTitle>
-                <Command className="h-5 w-5 text-muted-foreground" />
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="font-semibold text-md">eHR</CardTitle>
+                <Command className="w-5 h-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+12,234</div> */}
@@ -217,9 +217,9 @@ export default async function Dashboard() {
               </CardFooter>
             </Card>
             <Card x-chunk="dashboard-01-chunk-3">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-md font-semibold">복리후생</CardTitle>
-                <CreditCard className="h-5 w-5 text-muted-foreground" />
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="font-semibold text-md">복리후생</CardTitle>
+                <CreditCard className="w-5 h-5 text-muted-foreground" />
               </CardHeader>
               <CardContent className="pb-4">
                 {/* <div className="text-2xl font-bold">+573</div> */}
@@ -242,7 +242,7 @@ export default async function Dashboard() {
             </Card>
           </div>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between flex-wrap px-7">
+            <CardHeader className="flex flex-row flex-wrap items-center justify-between px-7">
               <CardTitle><Link prefetch={true} href="/mail">받은 메일</Link></CardTitle>
               <Button variant="outline" size="sm" asChild>
                 <Link prefetch={true} href="/mail">메일쓰기</Link>
@@ -257,24 +257,24 @@ export default async function Dashboard() {
                   <TableRow>
                     <TableHead className="w-24 md:w-32 2xl:w-40">보낸사람</TableHead>
                     <TableHead>제목</TableHead>
-                    <TableHead className="w-56 hidden xl:table-cell">타입</TableHead>
-                    <TableHead className="w-44 hidden lg:table-cell">날짜</TableHead>
+                    <TableHead className="hidden w-56 xl:table-cell">타입</TableHead>
+                    <TableHead className="hidden w-44 lg:table-cell">날짜</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {mailsData.map((mails, index) => (
                     <TableRow className={`${!mails.read ? "bg-accent" : ""}`} key={ mails.id }>
                       <TableCell className="p-0">
-                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3 pl-4">{ mails.name }</Link>
+                        <Link prefetch={true} href="/mail" className="block p-3 pl-4 font-medium truncate">{ mails.name }</Link>
                       </TableCell>
                       <TableCell className="p-0">
-                        <Link prefetch={true} href="/mail" className="block font-medium truncate p-3">
-                          {!mails.read && <span className="inline-block h-2 w-2 mr-1 rounded-full bg-blue-600" />}  
+                        <Link prefetch={true} href="/mail" className="block p-3 font-medium truncate">
+                          {!mails.read && <span className="inline-block w-2 h-2 mr-1 bg-blue-600 rounded-full" />}  
                           { mails.subject }
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 hidden xl:table-cell">
-                        <Link prefetch={true} href="/mail" className="block font-medium p-3">
+                      <TableCell className="hidden p-0 xl:table-cell">
+                        <Link prefetch={true} href="/mail" className="block p-3 font-medium">
                           {mails.labels.length ? (
                             <div className="flex items-center gap-1">
                               {mails.labels.map((label) => (
@@ -286,7 +286,7 @@ export default async function Dashboard() {
                           ) : null}
                         </Link>
                       </TableCell>
-                      <TableCell className="p-0 hidden lg:table-cell">
+                      <TableCell className="hidden p-0 lg:table-cell">
                         <Link prefetch={true} href="/mail" className="block p-3">{ formatDateHour(mails.date) }</Link>
                       </TableCell>
                     </TableRow>
@@ -308,8 +308,9 @@ export default async function Dashboard() {
                       alt="Style Guide"
                       width={852}
                       height={200}
-                      // fill
-                      className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                      className="hidden object-cover w-full rounded-xl sm:block lg:hidden xl:block"
                     />
                     <Image
                       // src="/images/banner-1.jpg"
@@ -317,8 +318,9 @@ export default async function Dashboard() {
                       alt="Style Guide"
                       width={240}
                       height={57}
-                      // fill
-                      className="w-full rounded-xl object-cover sm:hidden lg:block xl:hidden"
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                      className="object-cover w-full rounded-xl sm:hidden lg:block xl:hidden"
                     />
                   </Link>
                 </AspectRatio>
@@ -329,16 +331,18 @@ export default async function Dashboard() {
                       alt="Web planning"
                       width={852}
                       height={200}
-                      // fill
-                      className="w-full rounded-xl object-cover hidden sm:block lg:hidden xl:block"
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                      className="hidden object-cover w-full rounded-xl sm:block lg:hidden xl:block"
                     />
                     <Image
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/banner/banner-2-m.svg`}
                       alt="Web planning"
                       width={240}
                       height={57}
-                      // fill
-                      className="w-full rounded-xl object-cover sm:hidden lg:block xl:hidden"
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                      className="object-cover w-full rounded-xl sm:hidden lg:block xl:hidden"
                     />
                   </Link>
                 </AspectRatio>
@@ -353,7 +357,7 @@ export default async function Dashboard() {
                     <span>(The React Framework)</span>
                   </div>
                 </div>
-                <div className="grid auto-rows-max gap-2">
+                <div className="grid gap-2 auto-rows-max">
                   <div className="font-semibold">UI library</div>
                   <div className="grid gap-0.5 text-muted-foreground">
                     <span className="font-semibold">shadcn/ui</span>
